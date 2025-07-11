@@ -75,6 +75,21 @@ const normalizeColumnName = (header: string): string => {
   return mappings[normalized] || normalized.replace(/\s+/g, '_');
 };
 
+const parseNumericValue = (value: string | number): number => {
+  if (typeof value === 'number') return value;
+  
+  if (typeof value === 'string') {
+    // Remove pontos (separadores de milhar) e converte vírgula em ponto decimal
+    const cleaned = value
+      .replace(/\./g, '') // Remove pontos (separadores de milhar)
+      .replace(',', '.'); // Converte vírgula em ponto decimal
+    
+    return parseFloat(cleaned) || 0;
+  }
+  
+  return 0;
+};
+
 export const processData = (data: DashboardData[]): ProcessedData[] => {
   return data.map(item => {
     // Parse monetary values
@@ -82,29 +97,36 @@ export const processData = (data: DashboardData[]): ProcessedData[] => {
     const valor_negociado = parseMonetaryValue(item.valor_negociado);
     const arrecadado = parseMonetaryValue(item.arrecadado);
     
+    // Parse numeric values with thousand separators
+    const quantidade_de_clientes = parseNumericValue(item.quantidade_de_clientes);
+    const quantidade_de_acionamentos = parseNumericValue(item.quantidade_de_acionamentos);
+    const total_de_acordos = parseNumericValue(item.total_de_acordos);
+    const total_de_ligacoes = parseNumericValue(item.total_de_ligacoes);
+    const acionamentos_digital_produtivo = parseNumericValue(item.acionamentos_digital_produtivo);
+    
     // Calculate metrics
-    const taxa_acordos = item.quantidade_de_acionamentos > 0 
-      ? (item.total_de_acordos / item.quantidade_de_acionamentos) * 100 
+    const taxa_acordos = quantidade_de_acionamentos > 0 
+      ? (total_de_acordos / quantidade_de_acionamentos) * 100 
       : 0;
     
     const eficiencia_cobranca = valor_carteira > 0 
       ? (arrecadado / valor_carteira) * 100 
       : 0;
     
-    const ticket_medio = item.total_de_acordos > 0 
-      ? valor_negociado / item.total_de_acordos 
+    const ticket_medio = total_de_acordos > 0 
+      ? valor_negociado / total_de_acordos 
       : 0;
     
     return {
       mes: item.mes,
-      quantidade_de_clientes: Number(item.quantidade_de_clientes) || 0,
+      quantidade_de_clientes,
       valor_carteira,
-      quantidade_de_acionamentos: Number(item.quantidade_de_acionamentos) || 0,
-      total_de_acordos: Number(item.total_de_acordos) || 0,
+      quantidade_de_acionamentos,
+      total_de_acordos,
       valor_negociado,
       arrecadado,
-      total_de_ligacoes: Number(item.total_de_ligacoes) || 0,
-      acionamentos_digital_produtivo: Number(item.acionamentos_digital_produtivo) || 0,
+      total_de_ligacoes,
+      acionamentos_digital_produtivo,
       taxa_acordos,
       eficiencia_cobranca,
       ticket_medio,
