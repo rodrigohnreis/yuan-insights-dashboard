@@ -30,12 +30,13 @@ export function MetricsOverview({ data }: MetricsOverviewProps) {
     };
   };
 
-  const totalClientes = data.reduce((sum, item) => sum + item.quantidade_de_clientes, 0);
+  // Use latest data for current values, not totals across all periods
+  const currentClientes = latestData?.quantidade_de_clientes || 0;
   const totalCarteira = data.reduce((sum, item) => sum + item.valor_carteira, 0);
   const totalArrecadado = data.reduce((sum, item) => sum + item.arrecadado, 0);
   const totalAcionamentos = data.reduce((sum, item) => sum + item.quantidade_de_acionamentos, 0);
   const totalAcordos = data.reduce((sum, item) => sum + item.total_de_acordos, 0);
-  const totalLigacoes = data.reduce((sum, item) => sum + item.total_de_ligacoes, 0);
+  const currentLigacoes = latestData?.total_de_ligacoes || 0;
   const totalDigital = data.reduce((sum, item) => sum + item.acionamentos_digital_produtivo, 0);
 
   const taxaAcordosMedia = totalAcionamentos > 0 ? (totalAcordos / totalAcionamentos) * 100 : 0;
@@ -44,7 +45,7 @@ export function MetricsOverview({ data }: MetricsOverviewProps) {
   const metrics = [
     {
       title: "Total de Clientes",
-      value: formatNumber(totalClientes),
+      value: formatNumber(currentClientes),
       icon: Users,
       trend: previousData ? calculateTrend(latestData.quantidade_de_clientes, previousData.quantidade_de_clientes) : null,
       variant: 'primary' as const
@@ -72,7 +73,7 @@ export function MetricsOverview({ data }: MetricsOverviewProps) {
     },
     {
       title: "Total de Ligações",
-      value: formatNumber(totalLigacoes),
+      value: formatNumber(currentLigacoes),
       icon: Phone,
       trend: previousData ? calculateTrend(latestData.total_de_ligacoes, previousData.total_de_ligacoes) : null,
       variant: 'default' as const
