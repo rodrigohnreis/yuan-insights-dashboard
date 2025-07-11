@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
 import { ProcessedData } from '@/types/dashboard';
 import { formatNumber } from '@/utils/excel-parser';
 
@@ -58,7 +58,14 @@ export function BarChartComponent({
           dataKey={dataKey} 
           fill={color}
           radius={[4, 4, 0, 0]}
-        />
+        >
+          <LabelList 
+            dataKey={dataKey} 
+            position="top" 
+            formatter={formatValue}
+            className="fill-foreground text-xs font-medium"
+          />
+        </Bar>
       </BarChart>
     </ResponsiveContainer>
   );
