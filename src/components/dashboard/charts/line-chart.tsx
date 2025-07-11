@@ -16,13 +16,24 @@ export function LineChartComponent({
   color = "hsl(var(--yuan-primary))",
   formatValue = formatNumber
 }: LineChartComponentProps) {
+  const getDisplayName = (key: string): string => {
+    const names: Record<string, string> = {
+      'quantidade_de_clientes': 'Quantidade de Clientes',
+      'total_de_ligacoes': 'Total de Ligações',
+      'acionamentos_digital_produtivo': 'Acionamentos Digitais',
+      'taxa_acordos': 'Taxa de Acordos',
+      'eficiencia_cobranca': 'Eficiência de Cobrança'
+    };
+    return names[key] || key;
+  };
+
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
           <p className="text-sm font-medium text-card-foreground">{`Mês: ${label}`}</p>
           <p className="text-sm text-primary">
-            {`${payload[0].name}: ${formatValue(payload[0].value)}`}
+            {`${getDisplayName(String(dataKey))}: ${formatValue(payload[0].value)}`}
           </p>
         </div>
       );

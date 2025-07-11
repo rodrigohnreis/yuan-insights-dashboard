@@ -74,7 +74,8 @@ export function MetricsOverview({ data }: MetricsOverviewProps) {
       title: "Total de Ligações",
       value: formatNumber(totalLigacoes),
       icon: Phone,
-      trend: previousData ? calculateTrend(latestData.total_de_ligacoes, previousData.total_de_ligacoes) : null
+      trend: previousData ? calculateTrend(latestData.total_de_ligacoes, previousData.total_de_ligacoes) : null,
+      variant: 'default' as const
     },
     {
       title: "Eficiência de Cobrança",
@@ -87,13 +88,15 @@ export function MetricsOverview({ data }: MetricsOverviewProps) {
       title: "Total de Acordos",
       value: formatNumber(totalAcordos),
       icon: Handshake,
-      trend: previousData ? calculateTrend(latestData.total_de_acordos, previousData.total_de_acordos) : null
+      trend: previousData ? calculateTrend(latestData.total_de_acordos, previousData.total_de_acordos) : null,
+      variant: 'default' as const
     },
     {
       title: "Acionamentos Digitais",
       value: formatNumber(totalDigital),
       icon: Smartphone,
-      trend: previousData ? calculateTrend(latestData.acionamentos_digital_produtivo, previousData.acionamentos_digital_produtivo) : null
+      trend: previousData ? calculateTrend(latestData.acionamentos_digital_produtivo, previousData.acionamentos_digital_produtivo) : null,
+      variant: 'default' as const
     }
   ];
 
